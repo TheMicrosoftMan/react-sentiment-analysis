@@ -1,23 +1,32 @@
-import React from 'react';
+import React from "react";
+import { connect } from "react-redux";
+import * as textActions from "../../_actions/text.actions";
 
 class InputTextArea extends React.Component {
-  constructor(props) {
-    super(props);
-  
-    this.state = {
-      value: props.text  
-    }
-  }
-
-  inputHandler = (e) => {
-    this.setState({value: e.target.value});
-  }
-
   render() {
     return (
-      <textarea name="textBox" id="textBox" placeholder="Введіть текст..." value={this.state.value} onChange={this.inputHandler}></textarea>
+      <textarea
+        name="textBox"
+        id="textBox"
+        placeholder="Введіть текст..."
+        value={this.props.text}
+        onChange={e => this.props.textChange(e.target.value)}
+      />
     );
   }
 }
 
-export default InputTextArea;
+function mapStateToProps(state) {
+  const { text } = state;
+  return text;
+}
+
+const mapDispatchToProps = {
+  textChange: textActions.textChange
+};
+
+const connectedInputTextArea = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(InputTextArea);
+export { connectedInputTextArea as InputTextArea };

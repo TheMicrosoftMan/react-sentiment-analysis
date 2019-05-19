@@ -1,9 +1,26 @@
-import React from 'react';
+import React from "react";
+import { connect } from "react-redux";
+import * as textActions from "../../_actions/text.actions";
 
-const ExampleCloud = props => {
+class ExampleCloud extends React.Component {
+  render() {
     return (
-        <div className="example-cloud">{props.text}</div>
+      <div
+        className="example-cloud"
+        onClick={() => this.props.textChange(this.props.text)}
+      >
+        {this.props.text}
+      </div>
     );
+  }
 }
 
-export default ExampleCloud;
+const mapDispatchToProps = {
+  textChange: textActions.textChange
+};
+
+const connectedExampleCloud = connect(
+  null,
+  mapDispatchToProps
+)(ExampleCloud);
+export { connectedExampleCloud as ExampleCloud };
