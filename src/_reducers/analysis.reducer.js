@@ -1,6 +1,7 @@
 import { analysisConstants, sentimentConstants } from "../_constants";
 
 const initialState = {
+  training: false,
   text: "",
   sentimentalScore: 0,
   sentimentSticker: sentimentConstants.NEUTRAL
@@ -26,5 +27,22 @@ export function analysis(state = initialState, action) {
       return {
         ...initialState
       };
+  }
+}
+
+export function training(state = initialState, action) {
+  switch (action.type) {
+    case analysisConstants.ANALISATOR_START_TRAINING:
+      return {
+        training: true
+      }
+    case analysisConstants.ANALISATOR_END_TRAINING:
+      return {
+        training: false
+      }
+    default:
+      return {
+        training: false
+      }
   }
 }

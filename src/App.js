@@ -19,10 +19,16 @@ const examples = [
 ];
 
 class App extends React.Component {
-  state = {
-    text: "",
-    resultsList: []
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      text: "",
+      resultsList: []
+    };
+
+    this.props.training();
+  }  
 
   analysisText = () => {
     const analysResult = this.props.analysisText(this.props.text);
@@ -82,7 +88,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  analysisText: analysisActions.analysis
+  analysisText: analysisActions.analysis,
+  training: analysisActions.training
 };
 
 const connectedApp = connect(
