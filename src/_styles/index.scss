@@ -1,0 +1,24 @@
+@import "../components/InputTextArea/style.scss";
+@import "../components/AnalyzeButton/style.scss";
+@import "../components/ExampleCloud/style.scss";
+@import "../components/ResultCloud/style.scss";
+
+body {
+  background-color: #fff;
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+
+  .block {
+    width: 50%;
+
+    .examples-list {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+    }
+  }
+}
