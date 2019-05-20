@@ -11,7 +11,7 @@ export function analysis(state = initialState, action) {
   switch (action.type) {
     case analysisConstants.START_SENTIMENT_ANALYSIS:
       return {
-        ...initialState
+        ...state
       };
     case analysisConstants.SENTIMENT_ANALYSIS_SUCCESS:
       return {
@@ -21,11 +21,11 @@ export function analysis(state = initialState, action) {
       };
     case analysisConstants.SENTIMENT_ANALYSIS_ERROR:
       return {
-        ...initialState
+        ...state
       };
     default:
       return {
-        ...initialState
+        ...state
       };
   }
 }

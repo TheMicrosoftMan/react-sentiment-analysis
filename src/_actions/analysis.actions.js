@@ -1,19 +1,13 @@
 import { analysisConstants, sentimentConstants, languagesConstants } from "../_constants";
 import ukPositiveWords from "../datasets/ukr.posistive";
 import ukNegativeWords from "../datasets/ukr.negative";
-import { isCyrillic } from "../_helpers/isCyrillic";
 import Sentiment from "sentiment";
 const sentiment = new Sentiment();
 
 export const analysis = text => (dispatch, getState) => {
   dispatch({ type: analysisConstants.START_SENTIMENT_ANALYSIS });
   try {
-    let analyzeResult;
-    if (isCyrillic(text)) {
-      analyzeResult = sentiment.analyze(text, { language: languagesConstants.UK });
-    } else {
-      analyzeResult = sentiment.analyze(text, { language: languagesConstants.EN });
-    }
+    let analyzeResult = sentiment.analyze(text, { language: languagesConstants.EN });
     let sticker = sentimentConstants.NEUTRAL;
     if (analyzeResult.score > 0) {
       sticker = sentimentConstants.POSITIVE;

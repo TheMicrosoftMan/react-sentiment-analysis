@@ -8,11 +8,12 @@ export function text(state = initialState, action) {
   switch (action.type) {
     case textConstants.TEXT_ENTER:
       return {
+        ...state,
         text: action.payload
       };
     default:
       return {
-        ...initialState
+        ...state
       };
   }
 }

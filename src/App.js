@@ -1,12 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import * as analysisActions from "./_actions/analysis.actions";
+import * as translateActions from "./_actions/translate.actions";
 import { sentimentConstants } from "./_constants/";
 import "./_styles/index.scss";
 import { InputTextArea } from "./components/InputTextArea/";
 import AnalyzeButton from "./components/AnalyzeButton";
 import { ExampleCloud } from "./components/ExampleCloud";
 import ResultCloud from "./components/ResultCloud";
+import { isCyrillic } from "./_helpers/isCyrillic";
 
 const examples = [
   "Cats are stupid.",
@@ -28,13 +30,26 @@ class App extends React.Component {
     };
 
     this.props.training();
-  }  
+  }
 
   analysisText = () => {
-    const analysResult = this.props.analysisText(this.props.text);
-    let stateResults = this.state.resultsList;
-    stateResults.push(analysResult);
-    this.setState({ resultsList: stateResults });
+    if (isCyrillic(this.props.text)) {
+      this.props.translateText(this.props.text).then(() => {
+        const analysResult = this.props.analysisText(this.props.translate);
+        let stateResults = this.state.resultsList;
+        stateResults.push({
+          sentimentSticker: analysResult.sentimentSticker,
+          sentimentalScore: analysResult.sentimentalScore,
+          text: this.props.text
+        });
+        this.setState({ resultsList: stateResults });
+      });
+    } else {
+      const analysResult = this.props.analysisText(this.props.text);
+      let stateResults = this.state.resultsList;
+      stateResults.push(analysResult);
+      this.setState({ resultsList: stateResults });
+    }
   };
 
   getSticker = stickerType => {
@@ -83,13 +98,17 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { text } = state;
-  return text;
+  const { text, translate } = state;
+  return {
+    text: text.text,
+    translate: translate.translatedText
+  };
 }
 
 const mapDispatchToProps = {
   analysisText: analysisActions.analysis,
-  training: analysisActions.training
+  training: analysisActions.training,
+  translateText: translateActions.translate
 };
 
 const connectedApp = connect(
