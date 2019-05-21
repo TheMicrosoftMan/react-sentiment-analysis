@@ -33,21 +33,25 @@ class App extends React.Component {
   }
 
   analysisText = () => {
+    let textArray = this.props.text.split(".");
     if (isCyrillic(this.props.text)) {
       this.props.translateText(this.props.text).then(() => {
-        const analysResult = this.props.analysisText(this.props.translate);
-        let stateResults = this.state.resultsList;
-        stateResults.push({
-          sentimentSticker: analysResult.sentimentSticker,
-          sentimentalScore: analysResult.sentimentalScore,
-          text: this.props.text
+        let translateTextArray = this.props.translate.split(".");
+        const {analyzeResults} = this.props.analysisText(translateTextArray);
+        let stateResults = this.state.resultsList;        
+        let sentenceResultsArr = analyzeResults.map((sentence, index) => {
+          return `${this.getSticker(sentence.sticker)} ${textArray[index]}.`
         });
+        stateResults.push(sentenceResultsArr);
         this.setState({ resultsList: stateResults });
       });
-    } else {
-      const analysResult = this.props.analysisText(this.props.text);
+    } else {      
+      const {analyzeResults} = this.props.analysisText(textArray);
       let stateResults = this.state.resultsList;
-      stateResults.push(analysResult);
+      let sentenceResultsArr = analyzeResults.map(sentence => {
+        return `${this.getSticker(sentence.sticker)} ${sentence.text}.`
+      });
+      stateResults.push(sentenceResultsArr);
       this.setState({ resultsList: stateResults });
     }
   };
@@ -57,7 +61,7 @@ class App extends React.Component {
       case sentimentConstants.NEUTRAL:
         return "😐";
       case sentimentConstants.POSITIVE:
-        return "😄";
+        return "😊";
       case sentimentConstants.NEGATIVE:
         return "😔";
       default:
@@ -83,11 +87,18 @@ class App extends React.Component {
         <div className="block">
           {this.state.resultsList.length > 0 &&
             this.state.resultsList.map((result, index) => {
+              let text = result.map((sent, index) => {
+                return (
+                  <React.Fragment key={index}>
+                    {sent}
+                    <br></br>
+                  </React.Fragment>
+                )
+              });
               return (
                 <ResultCloud
                   key={index}
-                  text={result.text}
-                  sticker={this.getSticker(result.sentimentSticker)}
+                  text={text}
                 />
               );
             })}

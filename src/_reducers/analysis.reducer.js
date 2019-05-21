@@ -1,10 +1,8 @@
-import { analysisConstants, sentimentConstants } from "../_constants";
+import { analysisConstants } from "../_constants";
 
 const initialState = {
   training: false,
-  text: "",
-  sentimentalScore: 0,
-  sentimentSticker: sentimentConstants.NEUTRAL
+  analyzeResults: []
 };
 
 export function analysis(state = initialState, action) {
@@ -15,9 +13,7 @@ export function analysis(state = initialState, action) {
       };
     case analysisConstants.SENTIMENT_ANALYSIS_SUCCESS:
       return {
-        text: action.payload.text,
-        sentimentalScore: action.payload.sentimentalScore,
-        sentimentSticker: action.payload.sentimentSticker
+        analyzeResults: action.analyzeResults
       };
     case analysisConstants.SENTIMENT_ANALYSIS_ERROR:
       return {

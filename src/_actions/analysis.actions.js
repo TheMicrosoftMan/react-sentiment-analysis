@@ -4,28 +4,36 @@ import ukNegativeWords from "../datasets/ukr.negative";
 import Sentiment from "sentiment";
 const sentiment = new Sentiment();
 
-export const analysis = text => (dispatch, getState) => {
+export const analysis = textArray => (dispatch, getState) => {
   dispatch({ type: analysisConstants.START_SENTIMENT_ANALYSIS });
   try {
-    let analyzeResult = sentiment.analyze(text, { language: languagesConstants.EN });
-    let sticker = sentimentConstants.NEUTRAL;
-    if (analyzeResult.score > 0) {
-      sticker = sentimentConstants.POSITIVE;
-    } else if (analyzeResult.score < 0) {
-      sticker = sentimentConstants.NEGATIVE;
-    }
+    let analyzeResults = [];
+    textArray.forEach(sentence => {
+      if (sentence.length > 0) {
+        let analyzeResult = sentiment.analyze(sentence, {
+          language: languagesConstants.EN
+        });
+        let sticker = sentimentConstants.NEUTRAL;
+        if (analyzeResult.score > 0) {
+          sticker = sentimentConstants.POSITIVE;
+        } else if (analyzeResult.score < 0) {
+          sticker = sentimentConstants.NEGATIVE;
+        }
+        analyzeResults.push({
+          text: sentence,
+          score: analyzeResult.score,
+          sticker
+        });
+      }      
+    });
     dispatch({
       type: analysisConstants.SENTIMENT_ANALYSIS_SUCCESS,
       payload: {
-        text: text,
-        sentimentalScore: analyzeResult.score,
-        sentimentSticker: sticker
+        analyzeResults
       }
     });
     return {
-      text: text,
-      sentimentalScore: analyzeResult.score,
-      sentimentSticker: sticker
+      analyzeResults
     };
   } catch (error) {
     console.error(error);
@@ -35,7 +43,7 @@ export const analysis = text => (dispatch, getState) => {
 
 export const training = () => (dispatch, getState) => {
   dispatch({ type: analysisConstants.ANALISATOR_START_TRAINING });
-  let ukDataset = {...ukPositiveWords, ...ukNegativeWords};
+  let ukDataset = { ...ukPositiveWords, ...ukNegativeWords };
   let ukLanguage = {
     labels: ukDataset
   };

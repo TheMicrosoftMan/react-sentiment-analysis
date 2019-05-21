@@ -6,15 +6,6 @@
   margin: 19px 0;
   color: #333;
 
-  &_sticker {
-    position: absolute;
-    right: 15px;
-    font-size: 25pt;
-    line-height: 29pt;
-    top: -18px;
-    z-index: 1;
-  }
-
   &_text {
     display: flex;
     flex-wrap: wrap;
