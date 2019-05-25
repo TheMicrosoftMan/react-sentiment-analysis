@@ -6,7 +6,7 @@ const AnalyzeButton = props => {
       className="analyze-button"
       onClick={props.analysisText}
     >
-      Класифікувати
+      Аналізувати
     </button>
   );
 };

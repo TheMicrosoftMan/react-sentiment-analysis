@@ -43,6 +43,7 @@ class App extends React.Component {
           return `${this.getSticker(sentence.sticker)} ${textArray[index]}.`
         });
         stateResults.push(sentenceResultsArr);
+        stateResults.reverse();
         this.setState({ resultsList: stateResults });
       });
     } else {      
@@ -52,6 +53,7 @@ class App extends React.Component {
         return `${this.getSticker(sentence.sticker)} ${sentence.text}.`
       });
       stateResults.push(sentenceResultsArr);
+      stateResults.reverse();
       this.setState({ resultsList: stateResults });
     }
   };
@@ -84,7 +86,7 @@ class App extends React.Component {
             })}
           </div>
         </div>
-        <div className="block">
+        <div className="block result-list-block">
           {this.state.resultsList.length > 0 &&
             this.state.resultsList.map((result, index) => {
               let text = result.map((sent, index) => {
